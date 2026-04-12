@@ -1,5 +1,8 @@
+import { configDotenv } from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
+
+configDotenv();
 
 const app = express();
 
@@ -8,7 +11,7 @@ app.get('/', (req, res) => {
 });
 
 mongoose.connect(
-    "mongodb+srv://TravelBlog:Travelblog123@cluster0.6prczhr.mongodb.net/?appName=Cluster0"
+    process.env.MongoDB_URI
 ).then(() => {
     console.log("Connected to the database");
 });
