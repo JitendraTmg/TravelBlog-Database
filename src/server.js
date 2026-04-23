@@ -19,6 +19,38 @@ app.post('/travels', async (req, res) => {
     res.status(201).json(newTravel);
 })
 
+app.get('/travels', async (req, res) => {
+    const travels = await Travel.find();
+    res.status(200).json(travels);
+});
+
+app.get('/travels/:id', async (req, res) => {
+    const { id } = req.params;
+    const travel = await Travel.findById(id);
+    if (!travel) {
+        return res.status(404).json({ message: 'Travel not found' });
+    }
+    res.status(200).json(travel);
+});
+
+app.put('/travels/:id', async (req, res) => {
+    const { id } = req.params;
+    const { title, description, location, price, rating } = req.body;
+    const updatedTravel = await Travel.findByIdAndUpdate(id, { title, description, location, price, rating }, { new: true });
+    if (!updatedTravel) {
+        return res.status(404).json({ message: 'Travel not found' });
+    }
+    res.status(200).json(updatedTravel);
+});
+
+app.delete('/travels/:id', async (req, res) => {
+    const { id } = req.params;
+    const deletedTravel = await Travel.findByIdAndDelete(id);
+    if (!deletedTravel) {
+        return res.status(404).json({ message: 'Travel not found' });
+    }
+    res.status(200).json({ message: 'Travel deleted successfully' });
+});
 
 mongoose.connect(
     process.env.MongoDB_URI
